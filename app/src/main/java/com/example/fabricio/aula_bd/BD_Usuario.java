@@ -42,8 +42,11 @@ public class BD_Usuario extends SQLiteOpenHelper {
         //
     }
 
+
+
     public boolean salvarUsuario(String nome_usario, String email, String senha, BD_Usuario usuario){
 
+        Log.i(TAG, "usuario.getWritableDatabase()");
         SQLiteDatabase banco = usuario.getWritableDatabase();
 
         // preparando valores a serem armazenados
@@ -53,15 +56,20 @@ public class BD_Usuario extends SQLiteOpenHelper {
         valores.put("senha",senha);
 
         // efetuando o INSERT INTO
-        long resultado = banco.insert("usuario", null, valores);
+        try {
+            long resultado = banco.insert("usuario", null, valores);
 
-        // verifica se o INSERT INTO foi realizado com sucesso
-        if (resultado<0){
-            Log.i(TAG, "Ocorreu um erro durante a inserção dos dados!");
+            // verifica se o INSERT INTO foi realizado com sucesso
+            if (resultado<0){
+                Log.i(TAG, "Ocorreu um erro durante a inserção dos dados!");
+                return false;
+            }else{
+                Log.i(TAG, "Dados inseridos com sucesso no banco de dados!");
+                return  true;
+            }
+        }catch (SQLException e){
+            Log.e(TAG, e.toString());
             return false;
-        }else{
-            Log.i(TAG, "Dados inseridos com sucesso no banco de dados!");
-            return  true;
         }
 
 
